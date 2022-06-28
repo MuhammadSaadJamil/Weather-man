@@ -9,7 +9,7 @@ if args[1] == '-e':
     highest_temp = get_max_value(db, 2)
     lowest_temp = get_min_value(db, 2)
     highest_humidity = get_max_value(db, 8)
-    print(f"Highest: {highest_temp[1]} on {format_date(highest_temp[0])}")
+    print(f"Highest: {highest_temp[1]}C on {format_date(highest_temp[0])}")
     print(f"Lowest: {lowest_temp[1]}C on {format_date(lowest_temp[0])}")
     print(f"Humid: {highest_humidity[1]}% on {format_date(highest_humidity[0])}")
 elif args[1] == '-a':

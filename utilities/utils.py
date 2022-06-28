@@ -2,6 +2,11 @@ import sys
 from pathlib import Path
 from calendar import month_abbr, month_name
 
+"""This module contain all utilities required by main application"""
+
+"""Check if correct number of arguments are passed
+"""
+
 
 def check_args():
     args = sys.argv
@@ -11,8 +16,14 @@ def check_args():
     return args
 
 
+"""Get max value from given index column
+Inputs -> db: database, index: index of required value
+Output -> [date_of_max_value, max_value]
+"""
+
+
 def get_max_value(db, index):
-    max = 0
+    max = -1
     date = None
     for entry in db:
         try:
@@ -21,7 +32,15 @@ def get_max_value(db, index):
                 date = entry[0]
         except:
             pass
+    if max == -1:
+        return [date, -1]
     return [date, max]
+
+
+"""Get min value from given index column
+Inputs -> db: database, index: index of required value
+Output -> [date_of_min_value, min_value]
+"""
 
 
 def get_min_value(db, index):
@@ -34,7 +53,15 @@ def get_min_value(db, index):
                 date = entry[0]
         except:
             pass
+    if min == 10000:
+        return [date, -1]
     return [date, min]
+
+
+"""Get avg value from given index column
+Inputs -> db: database, index: index of required value
+Output -> avg_value | -1 in case of no data
+"""
 
 
 def get_avg_value(db, index):
@@ -46,7 +73,16 @@ def get_avg_value(db, index):
             readings += 1
         except:
             pass
-    return int(sum / readings)
+    try:
+        return int(sum / readings)
+    except:
+        return -1
+
+
+"""Create file/files path from args and return a list of files
+Inputs -> args: list of arguments passed on command line, month: boolean if command line argument contain month
+Output -> list of all paths
+"""
 
 
 def get_file_path(args, month=True):
@@ -61,14 +97,28 @@ def get_file_path(args, month=True):
         return paths
 
 
+"""Format date from YYYY-MM-DD to Month Date
+Inputs -> date: string date of format YYYY-MM-DD
+Output -> string fate of format Month Date
+"""
+
+
 def format_date(date):
     data = date.split("-")
     return f"{month_name[int(data[1])]} {data[2]}"
 
 
+"""Draw graph for all values in DB either inline or on separate line for all dates 
+Inputs -> db: database, date: date passed as argument, inline: boolean if graph will be inline
+Output -> Graph
+"""
+
+
 def draw_graph(db, date, inline=False):
+    # Format date
     data = date.split("/")
     print(f"{month_name[int(data[1])]} {data[0]}")
+    # Draw graph for every entry of db if data is present
     for entry in db:
         day = entry[0].split("-")[2]
         max_temp = -1

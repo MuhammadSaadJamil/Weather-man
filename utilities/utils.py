@@ -10,8 +10,9 @@ from calendar import month_abbr, month_name
 
 def check_args():
     args = sys.argv
-    if len(args) < 4:
+    if len(args) < 4 or len(args) > 4:
         print("Invalid number of arguments")
+        print("Format:\n\tpython3 weatherman.py -[flag] [Date] [/path/to/file]")
         exit()
     return args
 
@@ -97,6 +98,9 @@ def get_file_path(args, month=True):
             print("Missing / Invalid input for month. Use format YYYY/MM or YYYY/M for date.")
             exit()
     else:
+        if "/" in args[2]:
+            print("Invalid Date Entered. Enter Date of Format YYYY.")
+            exit()
         paths = []
         for month in month_abbr:
             paths.append(f"{args[3]}{Path(args[3]).name}_{args[2]}_{month}.txt")

@@ -88,8 +88,14 @@ Output -> list of all paths
 def get_file_path(args, month=True):
     if month:
         date = args[2].split("/")
-        file_path = f"{args[3]}{Path(args[3]).name}_{date[0]}_{month_abbr[int(date[1])]}.txt"
-        return [file_path]
+        try:
+            if int(date[1]) < 1:
+                raise Exception()
+            file_path = f"{args[3]}{Path(args[3]).name}_{date[0]}_{month_abbr[int(date[1])]}.txt"
+            return [file_path]
+        except:
+            print("Missing / Invalid input for month. Use format YYYY/MM or YYYY/M for date.")
+            exit()
     else:
         paths = []
         for month in month_abbr:
@@ -119,6 +125,7 @@ def draw_graph(db, date, inline=False):
     data = date.split("/")
     print(f"{month_name[int(data[1])]} {data[0]}")
     # Draw graph for every entry of db if data is present
+    data_flag = False
     for entry in db:
         day = entry[0].split("-")[2]
         max_temp = -1
@@ -133,11 +140,16 @@ def draw_graph(db, date, inline=False):
             pass
         if not inline:
             if max_temp != -1:
+                data_flag = True
                 print(f"{day.zfill(2)} \033[91m{'+' * max_temp}\033[00m {max_temp}C")
             if min_temp != -1:
+                data_flag = True
                 print(f"{day.zfill(2)} \033[96m{'+' * min_temp}\033[00m {min_temp}C")
         else:
             if max_temp != -1 and min_temp != -1:
+                data_flag = True
                 print(f"{day.zfill(2)} "
                       f"\033[96m{'+' * min_temp}\033[00m\033[91m{'+' * max_temp}\033[00m "
                       f"{min_temp}C - {max_temp}C")
+    if not data_flag:
+        print('No Data Found.')
